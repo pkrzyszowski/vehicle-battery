@@ -1,0 +1,35 @@
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<div class="row">
+<div class="col-md-8">
+    <div class="panel panel-default">
+    <div class="panel-heading text-center">Lista pojazdów z bateriami</div>
+    <div class="panel-heading text-center pull-right">
+      <a href="{% url 'vehicle:vehicle_add' %}" class="btn btn-danger">Dodaj pojazd</a>
+    </div>
+    <div class="panel-content">
+       <table class="table">
+          <thead>
+            <tr>
+                <th>#</th>
+                <th>ID</th>
+                <th>Nazwa pojazdu</th>
+                <th>Liczba baterii "ON/OFF"</th>
+            </tr>
+          </thead>
+            <tbody>
+            {% for x in vehicles %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ x.ID }}</td>
+                <td><a href="{% url 'vehicle:main' x.ID %}">{{ x.name }}</a></td>
+                <td>{{ x.batteries_on }}/{{ x.batteries_all }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+       </table>
+    </div>
+    </div>
+    </div>
+</div>

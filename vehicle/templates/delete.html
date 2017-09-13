@@ -1,0 +1,17 @@
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+<form class="well delete-form" method="post" action="{% url 'vehicle:delete' battery.ID %}">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal">×</button>
+    <h3>Potwierdzenie usunięcia</h3>
+  </div>
+  <div class="modal-body">
+       {% csrf_token %}
+       <p>Czy jesteś pewien, że chcesz usunąć "{{ object }}"?</p>
+  </div>
+  <div class="modal-footer">
+       <input class="btn btn-primary" type="submit" value="Confirm" />
+  </div>
+</form>
