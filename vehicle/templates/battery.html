@@ -2,26 +2,23 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
-{#<form action="{% url 'vehicle:vehicle_update' vehicle.ID %}" method="post">#}
-{#    {% csrf_token %}#}
-{#    <fieldset>#}
-{#		    <div class="col-md-12">#}
-{#			    <div class="col-md-6">#}
-{#			    	<h3>Dane pojazdu</h3>#}
-{#			        <div class="form-group">#}
-{#			            <label for="id_name" class="col-md-2 control-label">Nazwa:</label>#}
-{#			            <div class="col-md-9">#}
-{#			            	{{ form.name }}#}
-{#			            </div>#}
-{#			        </div>#}
-{#	        </div>#}
-{#            </div>#}
-{#        </fieldset>#}
-{#    <input  class="btn btn-danger" type="submit" value="Edytuj" />#}
-{#</form>#}
-
 <h1>Bateria</h1>
 <form action="{% url 'vehicle:battery' battery.ID %}" method="post">{% csrf_token %}
   {{ form }}
     <input  class="btn btn-primary" type="submit" value="Edytuj" />
 </from>
+
+{% if form.errors %}
+    {% for field in form %}
+        {% for error in field.errors %}
+            <div class="alert alert-danger">
+                <strong>{{ error|escape }}</strong>
+            </div>
+        {% endfor %}
+    {% endfor %}
+    {% for error in form.non_field_errors %}
+        <div class="alert alert-danger">
+            <strong>{{ error|escape }}</strong>
+        </div>
+    {% endfor %}
+{% endif %}

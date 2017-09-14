@@ -23,7 +23,7 @@
             <tr>
                 <td>{{ forloop.counter }}</td>
                 <td>{{ x.ID }}</td>
-                <td><a href="{% url 'vehicle:main' x.ID %}">{{ x.name }}</a></td>
+                <td><a href="{% url 'vehicle:vehicle_update' x.ID %}">{{ x.name }}</a></td>
                 <td>{{ x.batteries_on }}/{{ x.batteries_all }}</td>
             </tr>
             {% endfor %}

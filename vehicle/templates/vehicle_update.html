@@ -1,1 +1,60 @@
-<p>Edited</p>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+<h1>{{ vehicle.name }}</h1>
+<form action="{% url 'vehicle:vehicle_update' vehicle.ID %}" method="post">{% csrf_token %}
+{{ form }}
+    <input  class="btn btn-primary" type="submit" value="Edytuj" />
+</form>
+
+<div class="row">
+<div class="col-md-4">
+    <div class="panel panel-default">
+    <div class="panel-heading text-center">Lista baterii {{ vehicle.name }}</div>
+    </div>
+    <div class="panel-content">
+       <table class="table">
+          <thead>
+            <tr>
+                <th>#</th>
+                <th>ID</th>
+                <th>Numer</th>
+                <th>"ON/OFF"</th>
+                <th>.</th>
+            </tr>
+          </thead>
+            <tbody>
+            {% for x in batteries %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ x.ID }}</td>
+                <td>{{ x.number }}</td>
+                <td>{{ x.on_off}}</td>
+                <td><a href="{% url 'vehicle:battery' x.ID %}">Edytuj</a></td>
+                <td><a href="{% url 'vehicle:delete' x.ID %}">Usuń</a></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+       </table>
+    </div>
+    </div>
+    </div>
+</div>
+
+<a href="{% url 'vehicle:battery_add' %}"><input  class="btn btn-primary" type="submit" value="Dodaj baterię" /></a>
+
+{% if form.errors %}
+    {% for field in form %}
+        {% for error in field.errors %}
+            <div class="alert alert-danger">
+                <strong>{{ error|escape }}</strong>
+            </div>
+        {% endfor %}
+    {% endfor %}
+    {% for error in form.non_field_errors %}
+        <div class="alert alert-danger">
+            <strong>{{ error|escape }}</strong>
+        </div>
+    {% endfor %}
+{% endif %}

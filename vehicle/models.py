@@ -40,9 +40,9 @@ class Battery(models.Model):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         if not self.ID:
-            self.ID = '5' + ''.join(str(random.choice(list(range(1, 10000, 2)))))
+            self.ID = int('5' + ''.join(str(random.choice(list(range(1, 10000, 2))))))
             while Battery.objects.filter(ID=self.ID).exists():
-                self.ID = '5' + ''.join(str(random.choice(list(range(1, 10000, 2)))))
+                self.ID = int('5' + ''.join(str(random.choice(list(range(1, 10000, 2))))))
 
     def get_absolute_url(self):
         return reverse('vehicle:vehicle')

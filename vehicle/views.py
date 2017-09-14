@@ -30,39 +30,23 @@ class VehicleUpdateView(generic.UpdateView):
     form_class = VehicleUpdateForm
     template_name = 'vehicle_update.html'
 
+    def get(self, request, *args, **kwargs):
+        self.vehicle = Vehicle.objects.get(pk=kwargs['pk'])
+        return super().get(request, args, kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['batteries'] = Battery.objects.filter(vehicle=self.vehicle)
+        return context
 
 class BatteryCreateView(generic.CreateView):
+    vehicle_pk=None
     model = Battery
     form_class = BatteryCreateForm
     template_name = 'battery_create.html'
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        print(kwargs)
-
-
 
 
 class BatteryDeleteView(generic.DeleteView):
     model = Battery
     success_url = reverse_lazy('vehicle:vehicle')
     template_name = 'delete.html'
-
-
-class MainView(generic.TemplateView):
-    vehicle = None
-    template_name = 'main.html'
-
-    def get(self, request, *args, **kwargs):
-        self.vehicle = Vehicle.objects.get(pk=kwargs['pk'])
-        vehicle_pk = kwargs['pk']
-        vehicle_form = VehicleUpdateForm()
-        battery_form = BatteryCreateForm()
-        context = self.get_context_data(**kwargs)
-        context['batteries'] = Battery.objects.filter(vehicle=self.vehicle)
-        context['battery_form'] = battery_form
-        context['vehicle_form'] = vehicle_form
-        context['vehicle_pk'] = vehicle_pk
-        context['name'] = Vehicle.objects.get(pk=vehicle_pk)
-        return self.render_to_response(context)
-
