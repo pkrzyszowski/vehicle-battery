@@ -84,3 +84,6 @@ class BatteryDeleteView(generic.DeleteView):
     model = Battery
     success_url = reverse_lazy('vehicle:vehicle')
     template_name = 'delete.html'
+
+    def get_success_url(self):
+        return reverse('vehicle:vehicle_update', kwargs={'pk': self.object.vehicle.ID})
