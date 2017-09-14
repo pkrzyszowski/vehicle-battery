@@ -36,8 +36,18 @@ class BatteryUpdateForm(forms.ModelForm):
         model = Battery
         fields = '__all__'
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['vehicle'].required = False
+        self.fields['ID'].required = False
+
+
 class BatteryCreateForm(forms.ModelForm):
 
     class Meta:
         model = Battery
         fields = '__all__'
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['vehicle'].required = False

@@ -15,7 +15,7 @@ class Vehicle(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return reverse('vehicle:vehicle')
+        return reverse('vehicle:vehicle_update', kwargs={'pk': self.ID})
 
     def batteries_on(self):
         on = self.batteries.filter(on=True).count()

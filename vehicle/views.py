@@ -1,5 +1,6 @@
-from django.shortcuts import render
-from django.urls import reverse_lazy
+from django.http import HttpResponseRedirect
+from django.shortcuts import render, get_object_or_404
+from django.urls import reverse_lazy, reverse
 from django.views import generic
 
 from .forms import VehicleCreateForm, VehicleUpdateForm, BatteryCreateForm, BatteryUpdateForm
@@ -19,9 +20,24 @@ class VehicleCreateView(generic.CreateView):
 
 
 class BatteryUpdateView(generic.UpdateView):
+    vehicle=None
     model = Battery
     template_name = 'battery.html'
     form_class = BatteryUpdateForm
+
+    def dispatch(self, request, *args, **kwargs):
+        self.battery = get_object_or_404(Battery, pk=kwargs['pk'])
+        return super().dispatch(request, *args, **kwargs)
+
+    def form_valid(self, form, **kwargs):
+        self.object = form.save(commit=False)
+        self.object.vehicle = self.battery.vehicle
+        self.object.ID = self.battery.ID
+        self.object.save()
+        return HttpResponseRedirect(self.get_success_url())
+
+    def get_success_url(self):
+        return reverse('vehicle:vehicle_update', kwargs={'pk': self.object.vehicle.ID})
 
 
 class VehicleUpdateView(generic.UpdateView):
@@ -40,10 +56,28 @@ class VehicleUpdateView(generic.UpdateView):
         return context
 
 class BatteryCreateView(generic.CreateView):
-    vehicle_pk=None
+    vehicle = None
     model = Battery
     form_class = BatteryCreateForm
     template_name = 'battery_create.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['vehicle'] = self.vehicle
+        return context
+
+    def dispatch(self, request, *args, **kwargs):
+        self.vehicle = get_object_or_404(Vehicle, pk=kwargs['pk'])
+        return super().dispatch(request, *args, **kwargs)
+
+    def form_valid(self, form, **kwargs):
+        self.object = form.save(commit=False)
+        self.object.vehicle = self.vehicle
+        self.object.save()
+        return HttpResponseRedirect(self.get_success_url())
+
+    def get_success_url(self):
+        return reverse('vehicle:vehicle_update', kwargs={'pk': self.vehicle.ID})
 
 
 class BatteryDeleteView(generic.DeleteView):
